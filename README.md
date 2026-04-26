@@ -1,6 +1,11 @@
-# zoo-eval
+# Zoo-Eval: Benchmarking Web Agents with a Realistic Simulator
 
-Web agent evaluation harness using [The Zoo](https://github.com/anthropics/the_zoo).
+**ICLR 2026 Workshop on Agentic AI in the Wild and Agents in the Wild: Safety, Security, and Beyond** | [Paper](https://openreview.net/pdf?id=XPV8VrLw14) | [Website](https://zoo-eval.github.io/zoo_website/) | [The Zoo Infrastructure](https://github.com/bgrins/the_zoo)
+
+Zoo-eval is a benchmark framework for evaluating AI web agents on realistic, multi-site tasks. Agents interact with interconnected web services — email, Git hosting, Kanban boards, wikis, forums, and shopping — through a standard browser, just like a human would.
+
+Built on top of [The Zoo](https://github.com/bgrins/the_zoo), a Docker network of 13+ open-source applications sharing real backend services (mail, OIDC, databases, DNS, HTTPS).
+
 
 ## Setup
 
@@ -57,13 +62,11 @@ Provider is auto-detected from model name:
 - `provider/model` → OpenRouter (requires `OPENROUTER_API_KEY`)
 - No slash (e.g., `gpt-4o`) → OpenAI direct (requires `OPENAI_API_KEY`)
 
-**Aliases:** `flash`, `sonnet`, `opus`, `haiku`
 
 ```bash
 # Claude via Anthropic API
 export ANTHROPIC_API_KEY=your-key
 uv run zoo-eval run startup --task email --id 101 --model anthropic/claude-sonnet-4
-uv run zoo-eval run startup --task email --id 101 --model sonnet  # alias
 
 # OpenRouter (any model)
 export OPENROUTER_API_KEY=your-key
@@ -74,6 +77,17 @@ export OPENAI_API_KEY=your-key
 uv run zoo-eval run startup --task email --id 101 --model gpt-4o
 ```
 
+## Viewing Results
+
+```bash
+zoo-eval report              # Latest run
+zoo-eval report 19           # Specific run
+zoo-eval report --list       # All runs
+zoo-eval report 19 --detailed  # With evaluator reasoning
+```
+
+Results break down by autonomy level, environment condition, and task complexity.
+
 ## Documentation
 
 - [Benchmark Guide](docs/benchmark_guide.md) - Running benchmarks, autonomy levels, metrics
@@ -81,44 +95,20 @@ uv run zoo-eval run startup --task email --id 101 --model gpt-4o
 - [Authoring Scenes](docs/authoring-scenes.md) - Writing scene YAML files
 - [Multi-Agent](docs/multi-agent.md) - Multi-agent evaluation details
 
-## Other Commands
+## Citation
 
-```bash
-# Check Zoo status
-uv run zoo-eval status
+If you use Zoo-eval in your research, please cite:
 
-# Reset databases
-uv run zoo-eval reset
-
-# Query databases directly
-uv run zoo-eval postgres "SELECT * FROM users LIMIT 5" -d shopping
-uv run zoo-eval mysql --list
-
-# Audit db_match tasks (verify queries return correct expected values)
-uv run python scripts/audit_db_evals.py configs/tasks.yaml
-uv run python scripts/audit_db_evals.py configs/tasks.yaml --tasks 21
+```bibtex
+@inproceedings{grinstead2026zoo,
+  title={From the Wild Web to the {ZOO}: Benchmarking Web Agents with a Realistic Simulator},
+  author={Brian Grinstead and Mariana Meireles and Christoph Kerschbaumer and Cameron Allen},
+  booktitle={ICLR 2026 Workshop on Agentic AI in the Wild},
+  year={2026},
+  url={https://openreview.net/pdf?id=XPV8VrLw14}
+}
 ```
 
-## Dynamic Database Evaluation
+## License
 
-Use `db_match` eval type to dynamically query the database for expected values instead of hardcoding:
-
-```yaml
-- id: 21
-  intent: List reviewers who mention ear cups being small
-  eval:
-    types:
-      - db_match
-    db_query:
-      database: onestopshop_db
-      type: mysql
-      match_type: must_include
-      query: |
-        SELECT DISTINCT rd.nickname
-        FROM review r
-        JOIN review_detail rd ON r.review_id = rd.review_id
-        WHERE r.entity_pk_value = 76525
-        AND rd.detail LIKE '%small ear%'
-```
-
-This makes evaluations self-documenting and catches dataset bugs.
+GPL-3.0
