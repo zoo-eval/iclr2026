@@ -1,0 +1,46 @@
+[project]
+name = "zoo-eval"
+version = "0.1.0"
+description = "Web agent evaluation harness using The Zoo"
+requires-python = ">=3.11"
+dependencies = [
+    "browser-use>=0.1.40",
+    "pydantic>=2.0",
+    "httpx>=0.27",
+    "playwright>=1.40",
+    "rich>=13.0",
+    "typer>=0.12",
+    "pyyaml>=6.0.3",
+    "openai>=1.0",
+    "beautifulsoup4>=4.12",
+    "kagglehub>=0.2.0",
+    "claude-agent-sdk>=0.1.22",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.8",
+]
+proxy-events = [
+    "redis[hiredis]>=5.0",  # Async Redis with fast parser for proxy-based triggers
+]
+
+[project.scripts]
+zoo-eval = "zoo_eval.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/zoo_eval", "pet_to_wild"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

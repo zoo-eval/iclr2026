@@ -1,0 +1,52 @@
+name: startup
+sites:
+  - snappymail.zoo
+  - focalboard.zoo
+  - gitea.zoo
+  - wiki.zoo
+  - auth.zoo
+
+# Map site domains to Docker service names for health checks
+services:
+  snappymail.zoo:
+    - stalwart
+    - snappymail-zoo
+  gitea.zoo:
+    - gitea-zoo
+  focalboard.zoo:
+    - focalboard-zoo
+  auth.zoo:
+    - auth-zoo
+    - hydra
+  wiki.zoo:
+    - wiki-zoo
+  # Core services always needed
+  _core:
+    - proxy
+    - coredns
+    - caddy
+    - postgres
+    - mysql
+    - redis
+    - analytics-zoo
+
+agents:
+  - role: cofounder
+    name: alice
+    persona: Technical cofounder focused on product strategy and team coordination. Prefers async communication via email. Makes final decisions on product direction.
+    goal: Keep the team aligned and ship features that matter to customers.
+
+  - role: senior_engineer
+    name: bob
+    persona: Experienced backend developer who values code quality, testing, and mentorship. Reviews all PRs before merging. Direct communicator.
+    goal: Maintain code quality standards and help junior engineers grow through constructive feedback.
+
+  - role: junior_engineer
+    name: charlie
+    persona: Eager to learn and contribute. Sometimes unsure about best practices but asks good questions. Checks email and Kanban board regularly for task assignments.
+    goal: Complete assigned tasks correctly, learn from code reviews, and improve coding skills.
+
+  - role: pm
+    name: diana
+    persona: Organized and detail-oriented project manager. Tracks everything in Focalboard. Coordinates meetings and ensures deadlines are met.
+    goal: Keep projects on track, remove blockers for engineers, and keep stakeholders informed.

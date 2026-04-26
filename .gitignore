@@ -1,0 +1,63 @@
+# Python
+.env
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.DS_Store
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# uv
+.python-version
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.playwright-mcp/
+
+# Results
+results/
+traces/
+benchmark_results/
+*.log
+
+# Auth state (contains credentials)
+.auth/
+traces/
+*.db
+paper.tex
+references.bib
+logs/
+
+# Claude Code config
+CLAUDE.md
+AGENTS.md
+.mcp.json
+.claude/
